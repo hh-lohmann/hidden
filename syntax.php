@@ -153,13 +153,11 @@ class syntax_plugin_hidden extends DokuWiki_Syntax_Plugin {
 
           //"indent" nested for OPENING hiddens (compare for CLOSING hiddens)
           global $syntax_plugin_hidden_prefix ;
-          if ( $syntax_plugin_hidden_prefix == '' ) {
-            $syntax_plugin_hidden_prefix = '-' ;
-          } else {
+          if ( $syntax_plugin_hidden_prefix != '' ) {
             $data['onHidden'] = $syntax_plugin_hidden_prefix . $data['onHidden'] ;
             $data['onVisible'] = $syntax_plugin_hidden_prefix . $data['onVisible'] ;
-            $syntax_plugin_hidden_prefix .= $syntax_plugin_hidden_prefix ;
           }
+          $syntax_plugin_hidden_prefix .= '-' ;
 
            $this->editableBlocks[] = $data['edit'];
            $classEdit = ($data['edit'] ? $renderer->startSectionEdit($data['bytepos_start'], 'section', $data['editText']) : '');
