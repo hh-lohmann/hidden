@@ -121,7 +121,7 @@ class syntax_plugin_hidden extends DokuWiki_Syntax_Plugin {
 
         //for security
         $return['onHidden'] = htmlspecialchars($return['onHidden']);
-        $return['onVisible'] = htmlspecialchars($return['onVisible']);
+        $return['onVisible'] = '//'.htmlspecialchars($return['onVisible']).'//';
         $return['onExportPdf'] = htmlspecialchars($return['onExportPdf']); //FIXME: is it always the kind of escpaing we want?
 
         return $return;
