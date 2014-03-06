@@ -150,6 +150,17 @@ class syntax_plugin_hidden extends DokuWiki_Syntax_Plugin {
     if($mode == 'xhtml'){
       switch ($data['state']) {
         case DOKU_LEXER_ENTER :
+
+          //"indent" nested for OPENING hiddens (compare for CLOSING hiddens)
+          global $syntax_plugin_hidden_prefix ;
+          if ( $syntax_plugin_hidden_prefix == '' ) {
+            $syntax_plugin_hidden_prefix = '-' ;
+          } else {
+            $data['onHidden'] = $syntax_plugin_hidden_prefix . $data['onHidden'] ;
+            $data['onVisible'] = $syntax_plugin_hidden_prefix . $data['onVisible'] ;
+            $syntax_plugin_hidden_prefix .= $syntax_plugin_hidden_prefix ;
+          }
+
            $this->editableBlocks[] = $data['edit'];
            $classEdit = ($data['edit'] ? $renderer->startSectionEdit($data['bytepos_start'], 'section', $data['editText']) : '');
            $tab = array();
@@ -193,6 +204,13 @@ class syntax_plugin_hidden extends DokuWiki_Syntax_Plugin {
           break;
 
         case DOKU_LEXER_EXIT :
+
+          //"indent" nested for CLOSING hiddens (compare for OPENING hiddens)
+          global $syntax_plugin_hidden_prefix ;
+          if ( $syntax_plugin_hidden_prefix != '' ) {
+            $syntax_plugin_hidden_prefix = substr ( $syntax_plugin_hidden_prefix , 0 , ( strlen ( $syntax_plugin_hidden_prefix ) -1 )) ;
+          }
+
           $renderer->doc .= "</div></div>"; //close hiddenBody and hiddenGlobal
           if ( array_pop($this->editableBlocks) ){
               $renderer->finishSectionEdit($data['bytepos_end']);
